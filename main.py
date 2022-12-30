@@ -75,6 +75,15 @@ def getChange():
     print(df)
     return(df)
 
+def writeDate(text):
+    with open('date.txt', 'w') as f:
+        f.write(text)
+
+def readDate():
+    with open('date.txt', 'r') as f:
+        text = f.read()
+    return text
+
 def generateResponses(stocks):
         responses = []
         for index, stock in stocks.iterrows():
@@ -93,17 +102,22 @@ def generateResponses(stocks):
 
 def postTweet(msg):
     print(msg)
-    auth = tweepy.OAuthHandler("wFoywE5nxVuDhYtnnvJfJTWSs", "CP99ikqDsbRaU8eEk8LTXMHbppiiuH4ND7KnV1MmvC2LvjvnZ7")
-    auth.set_access_token("1575742272960102400-8R2akPGkohJzFOs8cuFyxDs5rzjF8B", "cRS1cmHYW5qDPYmGE8V2lUWtYsdXq18uM2Pcq879F0U3v")
-    api = tweepy.API(auth)
-    api.update_status(msg)
+    # auth = tweepy.OAuthHandler("wEiv7tt5dp87HAEIrMSaEhkAI", "hhU1Vw29KYCveMAAhVGGj9deV8MEobdpduXuV6FeSdo8JGUeEz")
+    # auth.set_access_token("1575742272960102400-k1loWQ9cnITIcmWPehyvzb1m7vmm1J", "9WGA5LnsWHNVT2cUhmMs0E0ybZrQP51AAz4eUHwGbinV4")
+    # api = tweepy.API(auth)
+    # api.update_status(msg)
 
 def main():
     initDB()
-    stocks = getChange()
-    responses = generateResponses(stocks)
-    for response in responses:
-        postTweet(response)
+    getPP()
+    currentDate = checkDate()
+    if  currentDate != readDate():
+        stocks = getChange()
+        responses = generateResponses(stocks)
+        for response in responses:
+            postTweet(response)
+        writeDate(currentDate)
+        
 
 
 if __name__ == "__main__":
