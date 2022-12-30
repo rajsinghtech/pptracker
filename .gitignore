@@ -130,5 +130,4 @@ dmypy.json
 
 files/
 temp.csv
-date.txt
 database.db

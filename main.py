@@ -4,16 +4,26 @@ import requests
 from datetime import datetime
 import os
 import tweepy
+import config
+import logging
+import urllib3
+import time
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+logging.basicConfig(filename='main.log', format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    level=logging.NOTSET)
+logging.info("test")
 url = 'https://www.mketf.com/wp-content/fund_files/files/TidalETF_Services.40ZZ.K3_Holdings_PP.csv'
-
-conn = sqlite3.connect('database.db')
+if not os.path.exists('db'):
+    os.makedirs('db')
+conn = sqlite3.connect('db/database.db')
 
 def initDB():
     cursor = conn.cursor()
-    query = 'CREATE VIEW if not EXISTS latest as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings LIMIT 1 OFFSET 0)'
+    query = 'CREATE VIEW if not EXISTS latest as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings ORDER BY date LIMIT 1 OFFSET 0)'
     cursor.execute(query)
-    query = 'CREATE VIEW if not EXISTS dayBefore as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings LIMIT 1 OFFSET 1)'
+    query = 'CREATE VIEW if not EXISTS dayBefore as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings ORDER BY date LIMIT 1 OFFSET 1)'
     cursor.execute(query)
     query = '''
     CREATE VIEW if not EXISTS change as SELECT stockticker, 
@@ -40,9 +50,9 @@ def initDB():
 
 def getPP():
     response = requests.get(url)
-    with open('temp.csv', 'w') as f:
+    with open('db/temp.csv', 'w') as f:
         f.write(response.text)
-    df = pd.read_csv('temp.csv')
+    df = pd.read_csv('db/temp.csv')
     df['Date'] = df['Date'].apply(lambda x: datetime.strptime(x, "%m/%d/%Y").strftime("%Y-%m-%d"))
     today = df.iloc[0, df.columns.get_loc('Date')]
     df.to_csv('files/' + today + '.csv', index=False)
@@ -63,7 +73,7 @@ def importPP(df):
 
 def checkDate():
     cursor = conn.cursor()
-    query = 'SELECT DISTINCT date from holdings LIMIT 1 OFFSET 1'
+    query = 'SELECT DISTINCT date from holdings ORDER BY date LIMIT 1 OFFSET 1'
     cursor.execute(query)
     x = cursor.fetchall()
     conn.commit()
@@ -76,11 +86,11 @@ def getChange():
     return(df)
 
 def writeDate(text):
-    with open('date.txt', 'w') as f:
+    with open('db/date.txt', 'w') as f:
         f.write(text)
 
 def readDate():
-    with open('date.txt', 'r') as f:
+    with open('db/date.txt', 'r') as f:
         text = f.read()
     return text
 
@@ -101,23 +111,30 @@ def generateResponses(stocks):
         return responses
 
 def postTweet(msg):
+    logging.info(msg)
     print(msg)
-    # auth = tweepy.OAuthHandler("wEiv7tt5dp87HAEIrMSaEhkAI", "hhU1Vw29KYCveMAAhVGGj9deV8MEobdpduXuV6FeSdo8JGUeEz")
-    # auth.set_access_token("1575742272960102400-k1loWQ9cnITIcmWPehyvzb1m7vmm1J", "9WGA5LnsWHNVT2cUhmMs0E0ybZrQP51AAz4eUHwGbinV4")
+    # auth = tweepy.OAuthHandler(config.apiKey, config.apiSecret)
+    # auth.set_access_token(config.accessToken, config.accessSecret)
     # api = tweepy.API(auth)
     # api.update_status(msg)
 
 def main():
     initDB()
-    getPP()
-    currentDate = checkDate()
-    if  currentDate != readDate():
-        stocks = getChange()
-        responses = generateResponses(stocks)
-        for response in responses:
-            postTweet(response)
-        writeDate(currentDate)
-        
+    while (1):
+        try:
+            logging.info("Checking Holdings")
+            getPP()
+            currentDate = checkDate()
+            if  currentDate != readDate():
+                stocks = getChange()
+                responses = generateResponses(stocks)
+                for response in responses:
+                    postTweet(response)
+                writeDate(currentDate)
+        except Exception as e:
+            logging.critical(e)
+        time.sleep(config.sleep)
+            
 
 
 if __name__ == "__main__":
