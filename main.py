@@ -28,9 +28,9 @@ conn = sqlite3.connect('db/database.db')
 
 def initDB():
     cursor = conn.cursor()
-    query = 'CREATE VIEW if not EXISTS latest as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings ORDER BY date LIMIT 1 OFFSET 0)'
+    query = 'CREATE VIEW if not EXISTS latest as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings ORDER BY date DESC LIMIT 1 OFFSET 0)'
     cursor.execute(query)
-    query = 'CREATE VIEW if not EXISTS dayBefore as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings ORDER BY date LIMIT 1 OFFSET 1)'
+    query = 'CREATE VIEW if not EXISTS dayBefore as SELECT * from holdings WHERE Date = (SELECT DISTINCT date from holdings ORDER BY date DESC LIMIT 1 OFFSET 1)'
     cursor.execute(query)
     query = '''
     CREATE VIEW if not EXISTS change as SELECT stockticker, 
