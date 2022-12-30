@@ -126,6 +126,7 @@ def postTweet(msg):
         api = tweepy.API(auth)
         api.update_status(msg)
     except Exception as e:
+        logging.critical("Tweet Error")
         logging.CRITICAL(e)
 
 def main():
@@ -143,6 +144,7 @@ def main():
                     postTweet(response)
                 writeDate(currentDate)
         except Exception as e:
+            logging.critical("Main Error")
             logging.critical(e)
 
         logging.info("Sleeping")
