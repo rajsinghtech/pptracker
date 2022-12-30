@@ -12,8 +12,5 @@ COPY .env .
 # Install the required libraries
 RUN pip3 install -r requirements.txt
 
-# Mount the host folder to the container
-VOLUME /files:/pptracker/files
-
 # Run the main script
 CMD ["python", "main.py"]

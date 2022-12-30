@@ -130,7 +130,8 @@ def main():
     while (1):
         try:
             logging.info("Checking Holdings")
-            getPP()
+            df = getPP()
+            importPP(df)
             currentDate = checkDate()
             if  currentDate != readDate():
                 stocks = getChange()
