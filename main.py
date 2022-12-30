@@ -120,10 +120,13 @@ def generateResponses(stocks):
 def postTweet(msg):
     logging.info(msg)
     print(msg)
-    auth = tweepy.OAuthHandler(apiKey, apiSecret)
-    auth.set_access_token(accessToken, accessSecret)
-    api = tweepy.API(auth)
-    api.update_status(msg)
+    try:
+        auth = tweepy.OAuthHandler(apiKey, apiSecret)
+        auth.set_access_token(accessToken, accessSecret)
+        api = tweepy.API(auth)
+        api.update_status(msg)
+    except Exception as e:
+        logging.CRITICAL(e)
 
 def main():
     initDB()
