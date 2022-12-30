@@ -127,7 +127,7 @@ def postTweet(msg):
         api.update_status(msg)
     except Exception as e:
         logging.critical("Tweet Error")
-        logging.CRITICAL(e)
+        logging.critical(e)
 
 def main():
     initDB()
