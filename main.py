@@ -138,11 +138,11 @@ def main():
             importPP(df)
             currentDate = checkDate()
             if  currentDate != readDate():
+                writeDate(currentDate)
                 stocks = getChange()
                 responses = generateResponses(stocks)
                 for response in responses:
                     postTweet(response)
-                writeDate(currentDate)
         except Exception as e:
             logging.critical("Main Error")
             logging.critical(e)
