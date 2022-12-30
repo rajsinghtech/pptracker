@@ -4,10 +4,17 @@ import requests
 from datetime import datetime
 import os
 import tweepy
-import config
 import logging
 import urllib3
 import time
+from dotenv import load_dotenv
+load_dotenv()
+
+apiKey = os.environ.get('apiKey')
+apiSecret = os.environ.get('apiSecret')
+accessToken = os.environ.get('accessToken')
+accessSecret = os.environ.get('accessSecret')
+sleep = os.environ.get('sleep')
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 logging.basicConfig(filename='main.log', format='%(asctime)s - %(levelname)s - %(message)s',
@@ -113,8 +120,8 @@ def generateResponses(stocks):
 def postTweet(msg):
     logging.info(msg)
     print(msg)
-    auth = tweepy.OAuthHandler(config.apiKey, config.apiSecret)
-    auth.set_access_token(config.accessToken, config.accessSecret)
+    auth = tweepy.OAuthHandler(apiKey, apiSecret)
+    auth.set_access_token(accessToken, accessSecret)
     api = tweepy.API(auth)
     api.update_status(msg)
 
@@ -135,7 +142,7 @@ def main():
             logging.critical(e)
 
         logging.info("Sleeping")
-        time.sleep(config.sleep)
+        time.sleep(int(sleep))
             
 
 
