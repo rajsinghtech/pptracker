@@ -12,8 +12,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 logging.basicConfig(filename='main.log', format='%(asctime)s - %(levelname)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
-                    level=logging.NOTSET)
-logging.info("test")
+                    level=logging.INFO)
+
 url = 'https://www.mketf.com/wp-content/fund_files/files/TidalETF_Services.40ZZ.K3_Holdings_PP.csv'
 if not os.path.exists('db'):
     os.makedirs('db')
