@@ -113,10 +113,10 @@ def generateResponses(stocks):
 def postTweet(msg):
     logging.info(msg)
     print(msg)
-    # auth = tweepy.OAuthHandler(config.apiKey, config.apiSecret)
-    # auth.set_access_token(config.accessToken, config.accessSecret)
-    # api = tweepy.API(auth)
-    # api.update_status(msg)
+    auth = tweepy.OAuthHandler(config.apiKey, config.apiSecret)
+    auth.set_access_token(config.accessToken, config.accessSecret)
+    api = tweepy.API(auth)
+    api.update_status(msg)
 
 def main():
     initDB()
@@ -133,6 +133,8 @@ def main():
                 writeDate(currentDate)
         except Exception as e:
             logging.critical(e)
+
+        logging.info("Sleeping")
         time.sleep(config.sleep)
             
 

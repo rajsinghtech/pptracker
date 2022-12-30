@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-config.py
 temp.csv
 database.db
 date.txt
+config.py
