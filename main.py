@@ -80,7 +80,7 @@ def importPP(df):
 
 def checkDate():
     cursor = conn.cursor()
-    query = 'SELECT DISTINCT date from holdings ORDER BY date LIMIT 1 OFFSET 1'
+    query = 'SELECT DISTINCT date from holdings ORDER BY date DESC LIMIT 1'
     cursor.execute(query)
     x = cursor.fetchall()
     conn.commit()
@@ -128,6 +128,8 @@ def postTweet(msg):
     except Exception as e:
         logging.critical("Tweet Error")
         logging.critical(e)
+        print(e)
+
 
 def main():
     initDB()
@@ -137,6 +139,9 @@ def main():
             df = getPP()
             importPP(df)
             currentDate = checkDate()
+            prevDate = readDate()
+            print("Read Date: " + prevDate)
+            print("Current Date: " + currentDate)
             if  currentDate != readDate():
                 writeDate(currentDate)
                 stocks = getChange()
@@ -146,6 +151,7 @@ def main():
         except Exception as e:
             logging.critical("Main Error")
             logging.critical(e)
+            print(e)
 
         logging.info("Sleeping")
         time.sleep(int(sleep))
