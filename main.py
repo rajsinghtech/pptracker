@@ -106,13 +106,13 @@ def generateResponses(stocks):
         for index, stock in stocks.iterrows():
             if stock['change'] != stock['change']:
                 if stock['latest'] != stock['latest']:
-                    responses.append("❌ Kevin closes his positon in ${}. Previously, {}% of $PP".format(stock['StockTicker'], stock['dayBeforeW']) )
+                    responses.append("❌ Kevin closes his position in ${}. Previously, {}% of $PP".format(stock['StockTicker'], stock['dayBeforeW']) )
                 else:
-                    responses.append("✅ Kevin opens a positon in ${}. Currently, {}% of $PP".format(stock['StockTicker'], stock['latestW']) )
+                    responses.append("✅ Kevin opens a position in ${}. Currently, {}% of $PP".format(stock['StockTicker'], stock['latestW']) )
             elif stock['change'] > 0:
-                responses.append("🟢 Kevin increases his positon in ${} by {}%. Currently, {}% of $PP".format(stock['StockTicker'], round(stock['change']/stock['dayBefore'] * 100, 2), stock['latestW']) )
+                responses.append("🟢 Kevin increases his position in ${} by {}%. Currently, {}% of $PP".format(stock['StockTicker'], round(stock['change']/stock['dayBefore'] * 100, 2), stock['latestW']) )
             elif stock['change'] < 0:
-                responses.append("🔴 Kevin decreases his positon in ${} by {}%. Currently, {}% of $PP".format(stock['StockTicker'], round(stock['change']/stock['dayBefore'] * -100, 2), stock['latestW']) )
+                responses.append("🔴 Kevin decreases his position in ${} by {}%. Currently, {}% of $PP".format(stock['StockTicker'], round(stock['change']/stock['dayBefore'] * -100, 2), stock['latestW']) )
             else:
                 continue
         return responses
