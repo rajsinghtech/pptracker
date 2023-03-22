@@ -133,6 +133,7 @@ def postTweet(msg):
 
 def main():
     initDB()
+    writeDate("2023-01-04")
     while (1):
         try:
             logging.info("Checking Holdings")
