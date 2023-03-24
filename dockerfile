@@ -1,7 +1,6 @@
 FROM python:3.8
 WORKDIR "/pptracker"
 # Clone the repository
-COPY /db .
 COPY main.py .
 
 # Copy the .env file to the repository directory
