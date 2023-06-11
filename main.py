@@ -7,8 +7,6 @@ import tweepy
 import logging
 import urllib3
 import time
-from dotenv import load_dotenv
-load_dotenv()
 
 apiKey = os.environ.get('apiKey')
 apiSecret = os.environ.get('apiSecret')
