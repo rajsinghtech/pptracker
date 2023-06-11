@@ -4,7 +4,6 @@ WORKDIR "/pptracker"
 COPY main.py .
 
 # Copy the .env file to the repository directory
-COPY .env .
 COPY requirements.txt .
 
 # Install the required libraries
