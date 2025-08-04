@@ -2,7 +2,7 @@ certifi==2022.12.7
 charset-normalizer==2.1.1
 config==0.5.1
 DateTime==4.9
-idna==3.4
+idna==3.10
 numpy==1.24.1
 oauthlib==3.2.2
 pandas==1.5.2
